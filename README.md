@@ -134,6 +134,3 @@ Made with ❤️ by [Caleb Wafula](https://www.linkedin.com/in/caleb-wafula-b253
 
 ---
 
-## 🚀 License
-
-This project is open-sourced under the **MIT License**. Feel free to use and improve it.
