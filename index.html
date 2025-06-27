@@ -136,11 +136,11 @@
 
       <label>Drills Taken to Job</label>
       <div class="checkbox-group">
-        <label><input type="checkbox" name="drills[]" value="Inco"> Inco</label>
-        <label><input type="checkbox" name="drills[]" value="Makita"> Makita</label>
-        <label><input type="checkbox" name="drills[]" value="Orange"> Orange</label>
-        <label><input type="checkbox" name="drills[]" value="Kzubr"> Kzubr</label>
-        <label><input type="checkbox" name="drills[]" value="Cordless"> Cordless</label>
+        <label><input type="checkbox" name="drills" value="Inco"> Inco</label>
+        <label><input type="checkbox" name="drills" value="Makita"> Makita</label>
+        <label><input type="checkbox" name="drills" value="Orange"> Orange</label>
+        <label><input type="checkbox" name="drills" value="Kzubr"> Kzubr</label>
+        <label><input type="checkbox" name="drills" value="Cordless"> Cordless</label>
       </div>
 
       <button type="submit">Submit Report</button>
@@ -152,7 +152,7 @@
   <script>
   const form = document.getElementById('toolsForm');
   const loader = document.getElementById('loader');
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbyqddX0RogazP6XrXuET54J8vGZfetMUUKqQKrCoaUk83E4DzeWlsee4nybGWWjnEf6/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzwEUP6tj-wdzTplhBm1AwxD6XwmS4t39MfzfApMaYGa4JeNhK1rZuen0GqLgJCp6FM/exec';
 
   form.addEventListener('submit', e => {
   e.preventDefault();
@@ -178,7 +178,7 @@
     closet: formData.get('closet'),
     blankets: formData.get('blankets'),
     chandarua: formData.get('chandarua'),
-    drills: formData.getAll('drills[]') // gets an array
+    drills: formData.getAll('drills') // gets an array
   };
 
   localStorage.setItem('submittedSummary', JSON.stringify(summary));
