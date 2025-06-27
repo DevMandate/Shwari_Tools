@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You - Shwari Movers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Include jsPDF library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .thankyou-container {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 720px;
+      width: 95%;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1.2s ease-out forwards;
+    }
+
+    h1 {
+      color: #f57c00;
+      margin-bottom: 20px;
+      animation: bounceIn 1s ease;
+      font-size: 28px;
+    }
+
+    .summary {
+      text-align: left;
+      margin-top: 25px;
+    }
+
+    .summary h3 {
+      margin-top: 0;
+      color: #f57c00;
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f9f9f9;
+    }
+
+    .table-section-header td {
+      background: #f57c00;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 6px;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    a, button {
+      margin-top: 25px;
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 24px;
+      background: #f57c00;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    a:hover, button:hover {
+      background: #e86c00;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 600px) {
+      td {
+        font-size: 14px;
+        padding: 10px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="thankyou-container">
+    <h1 id="thankyou-message">Thank you!</h1>
+
+    <div class="summary">
+      <h3>Submission Summary</h3>
+      <table id="summary-table">
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <button onclick="downloadPDF()">Download PDF Summary</button>
+    <a href="toolsform.html">Submit Another Report</a>
+  </div>
+
+  <script>
+    const summaryData = JSON.parse(localStorage.getItem('submittedSummary'));
+    const message = document.getElementById('thankyou-message');
+    const tableBody = document.querySelector('#summary-table tbody');
+
+    if (summaryData && summaryData.name) {
+      message.textContent = `Thank you, ${summaryData.name.trim()}!`;
+
+      const addRow = (label, value, isSection = false) => {
+        const tr = document.createElement('tr');
+        if (isSection) {
+          tr.classList.add('table-section-header');
+          tr.innerHTML = `<td colspan="2">${label}</td>`;
+        } else {
+          tr.innerHTML = `<td><strong>${label}</strong></td><td>${value || '-'}</td>`;
+        }
+        tableBody.appendChild(tr);
+      };
+
+      const drillList = summaryData.drills?.length > 0 ? summaryData.drills.join(', ') : 'None';
+
+      addRow('Team Leader', summaryData.name);
+      addRow('Date', summaryData.date);
+      addRow('Location', summaryData.location);
+      addRow('Closet', summaryData.closet);
+      addRow('Blankets', summaryData.blankets);
+      addRow('Chandarua', summaryData.chandarua);
+      addRow('Drills', drillList);
+
+      addRow('Box Counts', '', true);
+      addRow('Shwari Branded', summaryData.shwariBranded);
+      addRow('Shwari Big Old', summaryData.shwariBigOld);
+      addRow('Shwari Giant Boxes', summaryData.shwariGiantBoxes);
+      addRow('Shwari Small New', summaryData.shwariSmallNew);
+      addRow('Shwari Small Old', summaryData.shwariSmallOld);
+      addRow('Shwari Clear', summaryData.shwariClear);
+      addRow('Shanny Branded', summaryData.shannyBranded);
+      addRow('Shanny Big Old', summaryData.shannyBigOld);
+      addRow('Mansion', summaryData.mansion);
+    }
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(16);
+      doc.text("Shwari Movers - Tools Submission Summary", 14, 20);
+
+      if (!summaryData) return;
+
+      let y = 30;
+      const lineHeight = 8;
+
+      const addLine = (label, value) => {
+        doc.setFont("helvetica", "bold");
+        doc.text(`${label}:`, 14, y);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${value || '-'}`, 60, y);
+        y += lineHeight;
+      };
+
+      addLine("Team Leader", summaryData.name);
+      addLine("Date", summaryData.date);
+      addLine("Location", summaryData.location);
+      addLine("Closet", summaryData.closet);
+      addLine("Blankets", summaryData.blankets);
+      addLine("Chandarua", summaryData.chandarua);
+      addLine("Drills", summaryData.drills?.join(", ") || "None");
+
+      y += 5;
+      doc.setFont("helvetica", "bold");
+      doc.text("Box Counts:", 14, y);
+      y += lineHeight;
+
+      const boxes = [
+        ["Shwari Branded", summaryData.shwariBranded],
+        ["Shwari Big Old", summaryData.shwariBigOld],
+        ["Shwari Giant Boxes", summaryData.shwariGiantBoxes],
+        ["Shwari Small New", summaryData.shwariSmallNew],
+        ["Shwari Small Old", summaryData.shwariSmallOld],
+        ["Shwari Clear", summaryData.shwariClear],
+        ["Shanny Branded", summaryData.shannyBranded],
+        ["Shanny Big Old", summaryData.shannyBigOld],
+        ["Mansion", summaryData.mansion],
+      ];
+
+      boxes.forEach(([label, val]) => addLine(label, val));
+      doc.save(`Shwari_Report_${summaryData.name || 'Team'}.pdf`);
+    }
+  </script>
+</body>
+</html>

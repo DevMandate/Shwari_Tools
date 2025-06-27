@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shwari Movers - Tools Log</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .logo img {
+      width: 200px;
+      height: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #f57c00;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 5px;
+      font-size: 15px;
+    }
+
+    .checkbox-group label {
+      display: inline-block;
+      margin-right: 10px;
+      margin-top: 5px;
+      font-weight: normal;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background: #f57c00;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e86c00;
+    }
+
+    #loader {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      color: #f57c00;
+      font-weight: 600;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 15px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="img/Shwari Movers Logo.png" alt="Shwari Movers Logo">
+    </div>
+
+    <h2>Shwari Tools Submissions</h2>
+
+    <form id="toolsForm">
+      <label for="teamLeader">Team Leader Name</label>
+      <input type="text" id="teamLeader" name="teamLeader" required>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+
+      <label>Box Types</label>
+      <input type="number" placeholder="Shwari Branded" name="shwariBranded">
+      <input type="number" placeholder="Shwari Big Old" name="shwariBigOld">
+      <input type="number" placeholder="Shwari Giant Boxes" name="shwariGiantBoxes">
+      <input type="number" placeholder="Shwari Small New" name="shwariSmallNew">
+      <input type="number" placeholder="Shwari Small Old" name="shwariSmallOld">
+      <input type="number" placeholder="Shwari Clear" name="shwariClear">
+      <input type="number" placeholder="Shanny Branded" name="shannyBranded">
+      <input type="number" placeholder="Shanny Big Old" name="shannyBigOld">
+      <input type="number" placeholder="Mansion" name="mansion">
+
+      <label for="location">Location</label>
+      <input type="text" id="location" name="location">
+
+      <label for="closet">Closet</label>
+      <input type="text" name="closet" id="closet">
+
+      <label for="blankets">Number of Blankets</label>
+      <input type="number" id="blankets" name="blankets">
+
+      <label for="chandarua">Number of Chandarua</label>
+      <input type="number" id="chandarua" name="chandarua">
+
+      <label>Drills Taken to Job</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="drills[]" value="Inco"> Inco</label>
+        <label><input type="checkbox" name="drills[]" value="Makita"> Makita</label>
+        <label><input type="checkbox" name="drills[]" value="Orange"> Orange</label>
+        <label><input type="checkbox" name="drills[]" value="Kzubr"> Kzubr</label>
+        <label><input type="checkbox" name="drills[]" value="Cordless"> Cordless</label>
+      </div>
+
+      <button type="submit">Submit Report</button>
+      <div id="loader">Submitting your report, please wait...</div>
+    </form>
+  </div>
+
+  
+  <script>
+  const form = document.getElementById('toolsForm');
+  const loader = document.getElementById('loader');
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyqddX0RogazP6XrXuET54J8vGZfetMUUKqQKrCoaUk83E4DzeWlsee4nybGWWjnEf6/exec';
+
+  form.addEventListener('submit', e => {
+  e.preventDefault();
+  loader.style.display = 'block';
+
+  const formData = new FormData(form);
+  const teamLeaderName = formData.get('teamLeader');
+
+  // Store selected fields for summary
+  const summary = {
+    name: formData.get('teamLeader'),
+    date: formData.get('date'),
+    location: formData.get('location'),
+    shwariBranded: formData.get('shwariBranded'),
+    shwariBigOld: formData.get('shwariBigOld'),
+    shwariGiantBoxes: formData.get('shwariGiantBoxes'),
+    shwariSmallNew: formData.get('shwariSmallNew'),
+    shwariSmallOld: formData.get('shwariSmallOld'),
+    shwariClear: formData.get('shwariClear'),
+    shannyBranded: formData.get('shannyBranded'),
+    shannyBigOld: formData.get('shannyBigOld'),
+    mansion: formData.get('mansion'),
+    closet: formData.get('closet'),
+    blankets: formData.get('blankets'),
+    chandarua: formData.get('chandarua'),
+    drills: formData.getAll('drills[]') // gets an array
+  };
+
+  localStorage.setItem('submittedSummary', JSON.stringify(summary));
+
+  fetch(scriptURL, { method: 'POST', body: formData })
+    .then(response => response.json())
+    .then(data => {
+      if (data.result === 'success') {
+        window.location.href = 'thankyou.html';
+      } else {
+        alert("There was an error submitting your form. Please try again.");
+        loader.style.display = 'none';
+      }
+    })
+    .catch(error => {
+      console.error('Error!', error.message);
+      alert("Network error. Please try again.");
+      loader.style.display = 'none';
+    });
+});
+
+</script>
+
+
+
+</body>
+</html>
